@@ -9,7 +9,7 @@ module DeviseTokenAuth
       # derive target redirect route from 'resource_class' param, which was set
       # before authentication.
       devise_mapping = request.env['omniauth.params']['resource_class'].underscore.to_sym
-      redirect_route = "/#{Devise.mappings[devise_mapping].as_json["path"]}/#{params[:provider]}/callback"
+      redirect_route = "/#{Devise.mappings[devise_mapping].as_json["path"]}/#{params[:auth_provider]}/callback"
 
       # preserve omniauth info for success route. ignore 'extra' in twitter
       # auth response to avoid CookieOverflow.
@@ -20,10 +20,10 @@ module DeviseTokenAuth
     end
 
     def omniauth_success
-      # find or create user by provider and provider uid
+      # find or create user by auth_provider and auth_provider uid
       @resource = resource_class.where({
         uid:      auth_hash['uid'],
-        provider: auth_hash['provider']
+        auth_provider: auth_hash['auth_provider']
       }).first_or_initialize
       @oauth_registration = @resource.new_record?
 
@@ -56,8 +56,8 @@ module DeviseTokenAuth
         expiry: @expiry
       }
 
-      # sync user info with provider, update/generate auth token
-      assign_provider_attrs(@resource, auth_hash)
+      # sync user info with auth_provider, update/generate auth token
+      assign_auth_provider_attrs(@resource, auth_hash)
 
       # assign any additional (whitelisted) attributes
       extra_params = whitelisted_params
@@ -79,8 +79,8 @@ module DeviseTokenAuth
     end
 
 
-    # break out provider attribute assignment for easy method extension
-    def assign_provider_attrs(user, auth_hash)
+    # break out auth_provider attribute assignment for easy method extension
+    def assign_auth_provider_attrs(user, auth_hash)
       user.assign_attributes({
         nickname: auth_hash['info']['nickname'],
         name:     auth_hash['info']['name'],

@@ -10,7 +10,7 @@ class OmniauthTest < ActionDispatch::IntegrationTest
   setup do
     OmniAuth.config.test_mode = true
     OmniAuth.config.mock_auth[:facebook] = OmniAuth::AuthHash.new({
-      :provider => 'facebook',
+      :auth_provider => 'facebook',
       :uid => '123545',
       :info => {
         name: 'chong',
@@ -24,7 +24,7 @@ class OmniauthTest < ActionDispatch::IntegrationTest
   end
 
   describe 'default user model' do
-    describe 'from api to provider' do
+    describe 'from api to auth_provider' do
       before do
         get_via_redirect '/auth/facebook', {
           auth_origin_url: @redirect_url
@@ -49,7 +49,7 @@ class OmniauthTest < ActionDispatch::IntegrationTest
         assert @resource
       end
 
-      test 'user should be assigned info from provider' do
+      test 'user should be assigned info from auth_provider' do
         assert_equal 'chongbong@aol.com', @resource.email
       end
 
@@ -61,12 +61,12 @@ class OmniauthTest < ActionDispatch::IntegrationTest
         post_message = JSON.parse(/postMessage\((?<data>.*), '\*'\);/m.match(response.body)[:data])
 
 
-        ['id', 'email', 'uid', 'name', 
+        ['id', 'email', 'uid', 'name',
           'favorite_color', 'tokens', 'password'
         ].each do |key|
             assert_equal post_message[key], @resource.as_json[key], "Unexpected value for #{key.inspect}"
         end
-        
+
         assert_equal "deliverCredentials", post_message["message"]
         assert post_message["auth_token"]
         assert post_message["client_id"]
@@ -111,8 +111,8 @@ class OmniauthTest < ActionDispatch::IntegrationTest
           @resource ||= User.new
           def @resource.save!; end # prevent validation error
           @resource
-        end        
-        User.stub(:where, relation) do          
+        end
+        User.stub(:where, relation) do
           yield(relation.first_or_initialize)
         end
       end
@@ -126,7 +126,7 @@ class OmniauthTest < ActionDispatch::IntegrationTest
           get_via_redirect '/auth/facebook', {
             auth_origin_url: @redirect_url
           }
-           
+
           post_message = JSON.parse(/postMessage\((?<data>.*), '\*'\);/m.match(response.body)[:data])
           assert post_message['oauth_registration']
           assert_match 'oauth_registration', @controller.instance_variable_get(:@auth_origin_url)
@@ -142,7 +142,7 @@ class OmniauthTest < ActionDispatch::IntegrationTest
           get_via_redirect '/auth/facebook', {
             auth_origin_url: @redirect_url
           }
-          
+
           post_message = JSON.parse(/postMessage\((?<data>.*), '\*'\);/m.match(response.body)[:data])
           refute post_message['oauth_registration']
           assert_no_match 'oauth_registration', @controller.instance_variable_get(:@auth_origin_url)
@@ -205,7 +205,7 @@ class OmniauthTest < ActionDispatch::IntegrationTest
 
 
   describe 'alternate user model' do
-    describe 'from api to provider' do
+    describe 'from api to auth_provider' do
       before do
         get_via_redirect '/mangs/facebook', {
           auth_origin_url: @redirect_url
@@ -230,7 +230,7 @@ class OmniauthTest < ActionDispatch::IntegrationTest
         assert @resource
       end
 
-      test 'user should be assigned info from provider' do
+      test 'user should be assigned info from auth_provider' do
         assert_equal 'chongbong@aol.com', @resource.email
       end
 

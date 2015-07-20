@@ -25,8 +25,8 @@ module DeviseTokenAuth::Concerns::User
       serialize :tokens, JSON
     end
 
-    validates :email, presence: true, email: true, if: Proc.new { |u| u.provider == 'email' }
-    validates_presence_of :uid, if: Proc.new { |u| u.provider != 'email' }
+    validates :email, presence: true, email: true, if: Proc.new { |u| u.auth_provider == 'email' }
+    validates_presence_of :uid, if: Proc.new { |u| u.auth_provider != 'email' }
 
     # only validate unique emails among email registration users
     validate :unique_email_user, on: :create
@@ -86,7 +86,7 @@ module DeviseTokenAuth::Concerns::User
 
   module ClassMethods
     protected
-    
+
 
     def tokens_has_json_column_type?
       table_exists? && self.columns_hash['tokens'] && self.columns_hash['tokens'].type.in?([:json, :jsonb])
@@ -237,7 +237,7 @@ module DeviseTokenAuth::Concerns::User
 
   # only validate unique email among users that registered by email
   def unique_email_user
-    if provider == 'email' and self.class.where(provider: 'email', email: email).count > 0
+    if auth_provider == 'email' and self.class.where(auth_provider: 'email', email: email).count > 0
       errors.add(:email, :already_in_use, default: "address is already in use")
     end
   end
@@ -247,7 +247,7 @@ module DeviseTokenAuth::Concerns::User
   end
 
   def sync_uid
-    self.uid = email if provider == 'email'
+    self.uid = email if auth_provider == 'email'
   end
 
   def destroy_expired_tokens

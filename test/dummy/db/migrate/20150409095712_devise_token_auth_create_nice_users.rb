@@ -4,7 +4,7 @@ class DeviseTokenAuthCreateNiceUsers < ActiveRecord::Migration
   def change
     create_table(:nice_users) do |t|
       ## Required
-      t.string :provider, :null => false
+      t.string :auth_provider, :null => false
       t.string :uid, :null => false, :default => ""
 
       ## Database authenticatable
@@ -52,7 +52,7 @@ class DeviseTokenAuthCreateNiceUsers < ActiveRecord::Migration
     end
 
     add_index :nice_users, :email
-    add_index :nice_users, [:uid, :provider],     :unique => true
+    add_index :nice_users, [:uid, :auth_provider],     :unique => true
     add_index :nice_users, :reset_password_token, :unique => true
     # add_index :nice_users, :confirmation_token,   :unique => true
     # add_index :nice_users, :unlock_token,         :unique => true

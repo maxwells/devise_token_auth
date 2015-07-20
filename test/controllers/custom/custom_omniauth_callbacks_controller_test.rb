@@ -7,7 +7,7 @@ class Custom::OmniauthCallbacksControllerTest < ActionDispatch::IntegrationTest
     setup do
       OmniAuth.config.test_mode = true
       OmniAuth.config.mock_auth[:facebook] = OmniAuth::AuthHash.new({
-        :provider => 'facebook',
+        :auth_provider => 'facebook',
         :uid => '123545',
         :info => {
           name: 'swong',

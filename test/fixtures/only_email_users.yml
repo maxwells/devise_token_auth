@@ -3,7 +3,7 @@
 user:
   uid:                 "<%= @email %>"
   email:               "<%= @email %>"
-  provider:            'email'
+  auth_provider:            'email'
   created_at:          '<%= timestamp %>'
   updated_at:          '<%= timestamp %>'
   encrypted_password:  <%= User.new.send(:password_digest, 'secret123') %>

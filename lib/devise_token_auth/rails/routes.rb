@@ -50,11 +50,11 @@ module ActionDispatch::Routing
           # omniauth routes. only define if omniauth is installed and not skipped.
           if defined?(::OmniAuth) and not opts[:skip].include?(:omniauth_callbacks)
             match "#{full_path}/failure",             controller: omniauth_ctrl, action: "omniauth_failure", via: [:get]
-            match "#{full_path}/:provider/callback",  controller: omniauth_ctrl, action: "omniauth_success", via: [:get]
+            match "#{full_path}/:auth_provider/callback",  controller: omniauth_ctrl, action: "omniauth_success", via: [:get]
 
             # preserve the resource class thru oauth authentication by setting name of
             # resource as "resource_class" param
-            match "#{full_path}/:provider", to: redirect{|params, request|
+            match "#{full_path}/:auth_provider", to: redirect{|params, request|
               # get the current querystring
               qs = CGI::parse(request.env["QUERY_STRING"])
 
@@ -64,7 +64,7 @@ module ActionDispatch::Routing
               set_omniauth_path_prefix!(DeviseTokenAuth.omniauth_prefix)
 
               # re-construct the path for omniauth
-              "#{::OmniAuth.config.path_prefix}/#{params[:provider]}?#{{}.tap {|hash| qs.each{|k, v| hash[k] = v.first}}.to_param}"
+              "#{::OmniAuth.config.path_prefix}/#{params[:auth_provider]}?#{{}.tap {|hash| qs.each{|k, v| hash[k] = v.first}}.to_param}"
             }, via: [:get]
           end
         end

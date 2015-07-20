@@ -20,7 +20,7 @@ fr:
       not_allowed_redirect_url: "Redirection vers %{redirect_url} n'est pas autorisée."
       sended: "Un email a été envoyé à %{email} avec les instructions pour réinitialiser votre mot de passe."
       user_not_found: "Impossible de trouver un utilisateur avec cet email: '%{email}'."
-      password_not_required: "Ce compte ne demande pas de mot de passe. Connectez vous plutôt en utilisant %{provider}."
+      password_not_required: "Ce compte ne demande pas de mot de passe. Connectez vous plutôt en utilisant %{auth_provider}."
       missing_passwords: 'Vous devez remplir les champs "mt de passe" et "confirmation de mot de passe".'
       successfully_updated: "Votre mot de passe a été correctement mis à jour."
 

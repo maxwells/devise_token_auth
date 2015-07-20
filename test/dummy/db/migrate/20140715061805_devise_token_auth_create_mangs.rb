@@ -40,7 +40,7 @@ class DeviseTokenAuthCreateMangs < ActiveRecord::Migration
       t.string :image
 
       ## unique oauth id
-      t.string :provider
+      t.string :auth_provider
       t.string :uid, :null => false, :default => ""
 
       ## Tokens
@@ -54,7 +54,7 @@ class DeviseTokenAuthCreateMangs < ActiveRecord::Migration
     end
 
     add_index :mangs, :email
-    add_index :mangs, [:uid, :provider],     :unique => true
+    add_index :mangs, [:uid, :auth_provider],     :unique => true
     add_index :mangs, :reset_password_token, :unique => true
     add_index :mangs, :confirmation_token,   :unique => true
     # add_index :mangs, :unlock_token,         :unique => true

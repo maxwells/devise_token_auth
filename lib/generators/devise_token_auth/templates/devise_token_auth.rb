@@ -16,7 +16,7 @@ DeviseTokenAuth.setup do |config|
   #config.batch_request_buffer_throttle = 5.seconds
 
   # This route will be the prefix for all oauth2 redirect callbacks. For
-  # example, using the default '/omniauth', the github oauth2 provider will
+  # example, using the default '/omniauth', the github oauth2 auth_provider will
   # redirect successful authentications to '/omniauth/github/callback'
   #config.omniauth_prefix = "/omniauth"
 end

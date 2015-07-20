@@ -40,7 +40,7 @@ class DeviseTokenAuthCreateUsers < ActiveRecord::Migration
       t.string :image
 
       ## unique oauth id
-      t.string :provider
+      t.string :auth_provider
       t.string :uid, :null => false, :default => ""
 
       ## Tokens
@@ -54,7 +54,7 @@ class DeviseTokenAuthCreateUsers < ActiveRecord::Migration
     end
 
     add_index :users, :email
-    add_index :users, [:uid, :provider],     :unique => true
+    add_index :users, [:uid, :auth_provider],     :unique => true
     add_index :users, :reset_password_token, :unique => true
     add_index :users, :confirmation_token,   :unique => true
     add_index :users, :nickname,             :unique => true
