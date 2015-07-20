@@ -40,7 +40,7 @@ Please read the [issue reporting guidelines](#issue-reporting) before posting is
 * [Configuration Continued](#configuration-cont)
   * [Initializer Settings](#initializer-settings)
   * [OmniAuth Authentication](#omniauth-authentication)
-  * [OmniAuth Provider Settings](#omniauth-provider-settings)
+  * [OmniAuth auth_provider Settings](#omniauth-auth_provider-settings)
   * [Email Authentication](#email-authentication)
   * [Cross Origin Requests (CORS)](#cors)
 * [Usage Continued](#usage-cont)
@@ -119,7 +119,7 @@ The following events will take place when using the install generator:
 
 You may also need to configure the following items:
 
-* **OmniAuth providers** when using 3rd party oauth2 authentication. [Read more](#omniauth-authentication).
+* **OmniAuth auth_providers** when using 3rd party oauth2 authentication. [Read more](#omniauth-authentication).
 * **Cross Origin Request Settings** when using cross-domain clients. [Read more](#cors).
 * **Email** when using email registration. [Read more](#email-authentication).
 * **Multiple model support** may require additional steps. [Read more](#using-multiple-models).
@@ -137,8 +137,8 @@ The following routes are available for use by your client. These routes live rel
 | / | PUT | Account updates. This route will update an existing user's account settings. The default accepted params are **`password`** and **`password_confirmation`**, but this can be customized using the [`devise_parameter_sanitizer`](https://github.com/plataformatec/devise#strong-parameters) system. |
 | /sign_in | POST | Email authentication. Accepts **`email`** and **`password`** as params. This route will return a JSON representation of the `User` model on successful login. |
 | /sign_out | DELETE | Use this route to end the user's current session. This route will invalidate the user's authentication token. |
-| /:provider | GET | Set this route as the destination for client authentication. Ideally this will happen in an external window or popup. [Read more](#omniauth-authentication). |
-| /:provider/callback | GET/POST | Destination for the oauth2 provider's callback uri. `postMessage` events containing the authenticated user's data will be sent back to the main client window from this page. [Read more](#omniauth-authentication). |
+| /:auth_provider | GET | Set this route as the destination for client authentication. Ideally this will happen in an external window or popup. [Read more](#omniauth-authentication). |
+| /:auth_provider/callback | GET/POST | Destination for the oauth2 auth_provider's callback uri. `postMessage` events containing the authenticated user's data will be sent back to the main client window from this page. [Read more](#omniauth-authentication). |
 | /validate_token | GET | Use this route to validate tokens on return visits to the client. Accepts **`uid`** and **`access-token`** as params. These values should correspond to the columns in your `User` table of the same names. |
 | /password | POST | Use this route to send a password reset confirmation email to users that registered by email. Accepts **`email`** and **`redirect_url`** as params. The user matching the `email` param will be sent instructions on how to reset their password. `redirect_url` is the url to which the user will be redirected after visiting the link contained in the email. |
 | /password | PUT | Use this route to change users' passwords. Accepts **`password`** and **`password_confirmation`** as params. This route is only valid for users that registered by email (OAuth2 users will receive an error). |
@@ -157,7 +157,7 @@ The following settings are available for configuration in `config/initializers/d
 | **`change_headers_on_each_request`** | `true` | By default the access-token header will change after each request. The client is responsible for keeping track of the changing tokens. Both [ng-token-auth](https://github.com/lynndylanhurley/ng-token-auth) and [jToker](https://github.com/lynndylanhurley/j-toker) do this out of the box. While this implementation is more secure, it can be difficult to manage. Set this to false to prevent the `access-token` header from changing after each request. [Read more](#about-token-management). |
 | **`token_lifespan`** | `2.weeks` | Set the length of your tokens' lifespans. Users will need to re-authenticate after this duration of time has passed since their last login. |
 | **`batch_request_buffer_throttle`** | `5.seconds` | Sometimes it's necessary to make several requests to the API at the same time. In this case, each request in the batch will need to share the same auth token. This setting determines how far apart the requests can be while still using the same auth token. [Read more](#about-batch-requests). |
-| **`omniauth_prefix`** | `"/omniauth"` | This route will be the prefix for all oauth2 redirect callbacks. For example, using the default '/omniauth' setting, the github oauth2 provider will redirect successful authentications to '/omniauth/github/callback'. [Read more](#omniauth-provider-settings). |
+| **`omniauth_prefix`** | `"/omniauth"` | This route will be the prefix for all oauth2 redirect callbacks. For example, using the default '/omniauth' setting, the github oauth2 auth_provider will redirect successful authentications to '/omniauth/github/callback'. [Read more](#omniauth-auth_provider-settings). |
 | **`default_confirm_success_url`** | `nil` | By default this value is expected to be sent by the client so that the API knows where to redirect users after successful email confirmation. If this param is set, the API will redirect to this value when no value is provided by the cilent. |
 | **`default_password_reset_url`** | `nil` | By default this value is expected to be sent by the client so that the API knows where to redirect users after successful password resets. If this param is set, the API will redirect to this value when no value is provided by the cilent. |
 | **`redirect_whitelist`** | `nil` | As an added security measure, you can limit the URLs to which the API will redirect after email token validation (password reset, email confirmation, etc.). This value should be an array containing exact matches to the client URLs to be visited after validation. |
@@ -165,7 +165,7 @@ The following settings are available for configuration in `config/initializers/d
 
 ## OmniAuth authentication
 
-If you wish to use omniauth authentication, add all of your desired authentication provider gems to your `Gemfile`.
+If you wish to use omniauth authentication, add all of your desired authentication auth_provider gems to your `Gemfile`.
 
 **OmniAuth example using github, facebook, and google**:
 ~~~ruby
@@ -176,36 +176,36 @@ gem 'omniauth-google-oauth2'
 
 Then run `bundle install`.
 
-[List of oauth2 providers](https://github.com/intridea/omniauth/wiki/List-of-Strategies)
+[List of oauth2 auth_providers](https://github.com/intridea/omniauth/wiki/List-of-Strategies)
 
-## OmniAuth provider settings
+## OmniAuth auth_provider settings
 
-In `config/initializers/omniauth.rb`, add the settings for each of your providers.
+In `config/initializers/omniauth.rb`, add the settings for each of your auth_providers.
 
-These settings must be obtained from the providers themselves.
+These settings must be obtained from the auth_providers themselves.
 
 **Example using github, facebook, and google**:
 ~~~ruby
 # config/initializers/omniauth.rb
 Rails.application.config.middleware.use OmniAuth::Builder do
-  provider :github,        ENV['GITHUB_KEY'],   ENV['GITHUB_SECRET'],   scope: 'email,profile'
-  provider :facebook,      ENV['FACEBOOK_KEY'], ENV['FACEBOOK_SECRET']
-  provider :google_oauth2, ENV['GOOGLE_KEY'],   ENV['GOOGLE_SECRET']
+  auth_provider :github,        ENV['GITHUB_KEY'],   ENV['GITHUB_SECRET'],   scope: 'email,profile'
+  auth_provider :facebook,      ENV['FACEBOOK_KEY'], ENV['FACEBOOK_SECRET']
+  auth_provider :google_oauth2, ENV['GOOGLE_KEY'],   ENV['GOOGLE_SECRET']
 end
 ~~~
 
-The above example assumes that your provider keys and secrets are stored in environmental variables. Use the [figaro](https://github.com/laserlemon/figaro) gem (or [dotenv](https://github.com/bkeepers/dotenv) or [secrets.yml](https://github.com/rails/rails/blob/v4.1.0/railties/lib/rails/generators/rails/app/templates/config/secrets.yml) or equivalent) to accomplish this.
+The above example assumes that your auth_provider keys and secrets are stored in environmental variables. Use the [figaro](https://github.com/laserlemon/figaro) gem (or [dotenv](https://github.com/bkeepers/dotenv) or [secrets.yml](https://github.com/rails/rails/blob/v4.1.0/railties/lib/rails/generators/rails/app/templates/config/secrets.yml) or equivalent) to accomplish this.
 
 #### OmniAuth callback settings
 
-The "Callback URL" setting that you set with your provider must correspond to the [omniauth prefix](#initializer-settings) setting defined by this app. **This will be different than the omniauth route that is used by your client application**.
+The "Callback URL" setting that you set with your auth_provider must correspond to the [omniauth prefix](#initializer-settings) setting defined by this app. **This will be different than the omniauth route that is used by your client application**.
 
 For example, the demo app uses the default `omniauth_prefix` setting `/omniauth`, so the "Authorization callback URL" for github must be set to "http://devise-token-auth-demo.herokuapp.com**/omniauth**/github/callback".
 
 **Github example for the demo site**:
-![password reset flow](https://github.com/lynndylanhurley/devise_token_auth/raw/master/test/dummy/app/assets/images/omniauth-provider-settings.png)
+![password reset flow](https://github.com/lynndylanhurley/devise_token_auth/raw/master/test/dummy/app/assets/images/omniauth-auth_provider-settings.png)
 
-The url for github authentication will be different for the client. The client should visit the API at `/[MOUNT_PATH]/:provider` for omniauth authentication.
+The url for github authentication will be different for the client. The client should visit the API at `/[MOUNT_PATH]/:auth_provider` for omniauth authentication.
 
 For example, given that the app is mounted using the following settings:
 
@@ -219,10 +219,10 @@ The client configuration for github should look like this:
 **Angular.js setting for authenticating using github**:
 ~~~javascript
 angular.module('myApp', ['ng-token-auth'])
-  .config(function($authProvider) {
-    $authProvider.configure({
+  .config(function($authauth_provider) {
+    $authauth_provider.configure({
       apiUrl: 'http://api.example.com'
-      authProviderPaths: {
+      authauth_providerPaths: {
         github: '/auth/github' // <-- note that this is different than what was set with github
       }
     });
@@ -234,7 +234,7 @@ angular.module('myApp', ['ng-token-auth'])
 ~~~javascript
 $.auth.configure({
   apiUrl: 'http://api.example.com',
-  authProviderPaths: {
+  authauth_providerPaths: {
     github: '/auth/github' // <-- note that this is different than what was set with github
   }
 });
@@ -244,7 +244,7 @@ This incongruence is necessary to support multiple user classes and mounting poi
 
 #### Note for [pow](http://pow.cx/) and [xip.io](http://xip.io) users
 
-If you receive `redirect-uri-mismatch` errors from your provider when using pow or xip.io urls, set the following in your development config:
+If you receive `redirect-uri-mismatch` errors from your auth_provider when using pow or xip.io urls, set the following in your development config:
 
 ~~~ruby
 # config/environments/development.rb

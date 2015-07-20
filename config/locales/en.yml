@@ -20,7 +20,7 @@ en:
       not_allowed_redirect_url: "Redirect to %{redirect_url} not allowed."
       sended: "An email has been sent to %{email} containing instructions for resetting your password."
       user_not_found: "Unable to find user with email '%{email}'."
-      password_not_required: "This account does not require a password. Sign in using your %{provider} account instead."
+      password_not_required: "This account does not require a password. Sign in using your %{auth_provider} account instead."
       missing_passwords: 'You must fill out the fields labeled "password" and "password confirmation".'
       successfully_updated: "Your password has been successfully updated."
 

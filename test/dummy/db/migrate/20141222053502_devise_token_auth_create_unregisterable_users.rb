@@ -4,7 +4,7 @@ class DeviseTokenAuthCreateUnregisterableUsers < ActiveRecord::Migration
   def change
     create_table(:unregisterable_users) do |t|
       ## Required
-      t.string :provider, :null => false
+      t.string :auth_provider, :null => false
       t.string :uid, :null => false, :default => ""
 
       ## Database authenticatable
@@ -52,7 +52,7 @@ class DeviseTokenAuthCreateUnregisterableUsers < ActiveRecord::Migration
     end
 
     add_index :unregisterable_users, :email
-    add_index :unregisterable_users, [:uid, :provider],     :unique => true
+    add_index :unregisterable_users, [:uid, :auth_provider],     :unique => true
     add_index :unregisterable_users, :reset_password_token, :unique => true
     # add_index :unregisterable_users, :confirmation_token,   :unique => true
     # add_index :unregisterable_users, :unlock_token,         :unique => true

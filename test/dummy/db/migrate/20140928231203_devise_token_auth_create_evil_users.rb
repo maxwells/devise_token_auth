@@ -38,7 +38,7 @@ class DeviseTokenAuthCreateEvilUsers < ActiveRecord::Migration
       t.string :image
 
       ## unique oauth id
-      t.string :provider
+      t.string :auth_provider
       t.string :uid, :null => false, :default => ""
 
       ## Tokens
@@ -55,7 +55,7 @@ class DeviseTokenAuthCreateEvilUsers < ActiveRecord::Migration
     end
 
     add_index :evil_users, :email
-    add_index :evil_users, [:uid, :provider],     :unique => true
+    add_index :evil_users, [:uid, :auth_provider],     :unique => true
     add_index :evil_users, :reset_password_token, :unique => true
     add_index :evil_users, :confirmation_token,   :unique => true
     # add_index :evil_users, :unlock_token,         :unique => true

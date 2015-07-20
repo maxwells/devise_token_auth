@@ -20,7 +20,7 @@ es:
       not_allowed_redirect_url: "Redirección hacia %{redirect_url} no esta permitida."
       sended: "Un correo electrónico ha sido enviado a %{email} con las instrucciones para restablecer su contraseña."
       user_not_found: "No se pudo encontrar un usuario con este correo electrónico: '%{email}'."
-      password_not_required: "Esta cuenta no requiere contraseña. Iniciar sesión utilizando %{provider}."
+      password_not_required: "Esta cuenta no requiere contraseña. Iniciar sesión utilizando %{auth_provider}."
       missing_passwords: 'Debe llenar los campos "contraseña" y "confirmación de contraseña".'
       successfully_updated: "Su contraseña ha sido actualizada con éxito."
 

@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(version: 20150708104536) do
     t.string   "name",                   limit: 255
     t.string   "nickname",               limit: 255
     t.string   "image",                  limit: 255
-    t.string   "provider",               limit: 255
+    t.string   "auth_provider",               limit: 255
     t.string   "uid",                    limit: 255,   default: "", null: false
     t.text     "tokens",                 limit: 65535
     t.string   "favorite_color",         limit: 255
@@ -42,7 +42,7 @@ ActiveRecord::Schema.define(version: 20150708104536) do
   add_index "evil_users", ["confirmation_token"], name: "index_evil_users_on_confirmation_token", unique: true
   add_index "evil_users", ["email"], name: "index_evil_users_on_email"
   add_index "evil_users", ["reset_password_token"], name: "index_evil_users_on_reset_password_token", unique: true
-  add_index "evil_users", ["uid", "provider"], name: "index_evil_users_on_uid_and_provider", unique: true
+  add_index "evil_users", ["uid", "auth_provider"], name: "index_evil_users_on_uid_and_auth_provider", unique: true
 
   create_table "mangs", force: :cascade do |t|
     t.string   "email",                       limit: 255
@@ -64,7 +64,7 @@ ActiveRecord::Schema.define(version: 20150708104536) do
     t.string   "name",                        limit: 255
     t.string   "nickname",                    limit: 255
     t.string   "image",                       limit: 255
-    t.string   "provider",                    limit: 255
+    t.string   "auth_provider",                    limit: 255
     t.string   "uid",                         limit: 255,   default: "", null: false
     t.text     "tokens",                      limit: 65535
     t.datetime "created_at"
@@ -75,10 +75,10 @@ ActiveRecord::Schema.define(version: 20150708104536) do
   add_index "mangs", ["confirmation_token"], name: "index_mangs_on_confirmation_token", unique: true
   add_index "mangs", ["email"], name: "index_mangs_on_email"
   add_index "mangs", ["reset_password_token"], name: "index_mangs_on_reset_password_token", unique: true
-  add_index "mangs", ["uid", "provider"], name: "index_mangs_on_uid_and_provider", unique: true
+  add_index "mangs", ["uid", "auth_provider"], name: "index_mangs_on_uid_and_auth_provider", unique: true
 
   create_table "nice_users", force: :cascade do |t|
-    t.string   "provider",                            null: false
+    t.string   "auth_provider",                            null: false
     t.string   "uid",                    default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"
@@ -104,10 +104,10 @@ ActiveRecord::Schema.define(version: 20150708104536) do
 
   add_index "nice_users", ["email"], name: "index_nice_users_on_email"
   add_index "nice_users", ["reset_password_token"], name: "index_nice_users_on_reset_password_token", unique: true
-  add_index "nice_users", ["uid", "provider"], name: "index_nice_users_on_uid_and_provider", unique: true
+  add_index "nice_users", ["uid", "auth_provider"], name: "index_nice_users_on_uid_and_auth_provider", unique: true
 
   create_table "only_email_users", force: :cascade do |t|
-    t.string   "provider",           limit: 255,                null: false
+    t.string   "auth_provider",           limit: 255,                null: false
     t.string   "uid",                limit: 255,   default: "", null: false
     t.string   "encrypted_password", limit: 255,   default: "", null: false
     t.string   "name",               limit: 255
@@ -120,10 +120,10 @@ ActiveRecord::Schema.define(version: 20150708104536) do
   end
 
   add_index "only_email_users", ["email"], name: "index_only_email_users_on_email"
-  add_index "only_email_users", ["uid", "provider"], name: "index_only_email_users_on_uid_and_provider", unique: true
+  add_index "only_email_users", ["uid", "auth_provider"], name: "index_only_email_users_on_uid_and_auth_provider", unique: true
 
   create_table "unconfirmable_users", force: :cascade do |t|
-    t.string   "provider",                            null: false
+    t.string   "auth_provider",                            null: false
     t.string   "uid",                    default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"
@@ -145,10 +145,10 @@ ActiveRecord::Schema.define(version: 20150708104536) do
 
   add_index "unconfirmable_users", ["email"], name: "index_unconfirmable_users_on_email"
   add_index "unconfirmable_users", ["reset_password_token"], name: "index_unconfirmable_users_on_reset_password_token", unique: true
-  add_index "unconfirmable_users", ["uid", "provider"], name: "index_unconfirmable_users_on_uid_and_provider", unique: true
+  add_index "unconfirmable_users", ["uid", "auth_provider"], name: "index_unconfirmable_users_on_uid_and_auth_provider", unique: true
 
   create_table "unregisterable_users", force: :cascade do |t|
-    t.string   "provider",               limit: 255,                null: false
+    t.string   "auth_provider",               limit: 255,                null: false
     t.string   "uid",                    limit: 255,   default: "", null: false
     t.string   "encrypted_password",     limit: 255,   default: "", null: false
     t.string   "reset_password_token",   limit: 255
@@ -174,7 +174,7 @@ ActiveRecord::Schema.define(version: 20150708104536) do
 
   add_index "unregisterable_users", ["email"], name: "index_unregisterable_users_on_email"
   add_index "unregisterable_users", ["reset_password_token"], name: "index_unregisterable_users_on_reset_password_token", unique: true
-  add_index "unregisterable_users", ["uid", "provider"], name: "index_unregisterable_users_on_uid_and_provider", unique: true
+  add_index "unregisterable_users", ["uid", "auth_provider"], name: "index_unregisterable_users_on_uid_and_auth_provider", unique: true
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                       limit: 255
@@ -196,7 +196,7 @@ ActiveRecord::Schema.define(version: 20150708104536) do
     t.string   "name",                        limit: 255
     t.string   "nickname",                    limit: 255
     t.string   "image",                       limit: 255
-    t.string   "provider",                    limit: 255
+    t.string   "auth_provider",                    limit: 255
     t.string   "uid",                         limit: 255,   default: "", null: false
     t.text     "tokens",                      limit: 65535
     t.datetime "created_at"
@@ -209,6 +209,6 @@ ActiveRecord::Schema.define(version: 20150708104536) do
   add_index "users", ["email"], name: "index_users_on_email"
   add_index "users", ["nickname"], name: "index_users_on_nickname", unique: true
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-  add_index "users", ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
+  add_index "users", ["uid", "auth_provider"], name: "index_users_on_uid_and_auth_provider", unique: true
 
 end

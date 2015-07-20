@@ -3,7 +3,7 @@
 confirmed_email_user:
   uid:                 "<%= @email %>"
   email:               "<%= @email %>"
-  provider:            'email'
+  auth_provider:            'email'
   confirmed_at:        '<%= timestamp %>'
   created_at:          '<%= timestamp %>'
   updated_at:          '<%= timestamp %>'
@@ -13,7 +13,7 @@ confirmed_email_user:
 duplicate_email_facebook_user:
   uid:                 "<%= Faker::Number.number(10) %>"
   email:               "<%= @fb_email %>"
-  provider:            'facebook'
+  auth_provider:            'facebook'
   created_at:          '<%= timestamp %>'
   updated_at:          '<%= timestamp %>'
   confirmed_at:        '<%= timestamp %>'
@@ -23,7 +23,7 @@ duplicate_email_facebook_user:
 unconfirmed_email_user:
   uid:                 "<%= @unconfirmed_email %>"
   email:               "<%= @unconfirmed_email %>"
-  provider:            'email'
+  auth_provider:            'email'
   created_at:          '<%= timestamp %>'
   updated_at:          '<%= timestamp %>'
   encrypted_password:  <%= Mang.new.send(:password_digest, 'secret123') %>
